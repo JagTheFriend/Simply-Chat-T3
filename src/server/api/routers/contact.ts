@@ -12,4 +12,12 @@ export const contactRouter = createTRPCRouter({
         },
       });
     }),
+
+  getContacts: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.contact.findMany({
+      where: {
+        ownerId: ctx.session.user.id,
+      },
+    });
+  }),
 });

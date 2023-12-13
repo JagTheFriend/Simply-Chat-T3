@@ -1,4 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Navbar() {
   const { data: currentSessionData } = useSession();
@@ -23,9 +24,9 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <Link className="nav-link active" aria-current="page" href="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
               <a

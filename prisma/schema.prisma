@@ -73,6 +73,7 @@ model Contact {
     owner   User   @relation(fields: [ownerId], references: [id])
     ownerId String
 
+    @@unique([ownerId, contactId])
     @@index([ownerId, contactId])
     @@index([contactId, ownerId])
 }

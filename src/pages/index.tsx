@@ -32,6 +32,7 @@ function DisplayUsername() {
         alt="Avatar"
         className="avatar avatar-48 bg-light rounded-circle text-white p-2"
         src={currentSessionData?.user.image ?? ""}
+        style={{ marginLeft: "0.5rem" }}
       />{" "}
       {currentSessionData?.user?.name}!
     </div>

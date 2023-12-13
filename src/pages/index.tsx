@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
 
@@ -14,11 +15,34 @@ function Metadata() {
   );
 }
 
+function DisplayUsername() {
+  const { data: currentSessionData } = useSession();
+  return (
+    <div
+      style={{
+        fontSize: "19px",
+        paddingTop: "1rem",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      Welcome {currentSessionData?.user?.name}!
+      <img
+        alt="Avatar"
+        className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+        src={currentSessionData?.user.image ?? ""}
+      />
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <>
       <Metadata />
       <Navbar />
+      <DisplayUsername />
+      <hr />
     </>
   );
 }

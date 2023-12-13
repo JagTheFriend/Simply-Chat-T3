@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
+import { api } from "~/utils/api";
 
 function Metadata() {
   return (
@@ -40,12 +41,43 @@ function DisplayUsername() {
   );
 }
 
+function DisplayContactsList() {
+  const { data: contactData, isError } = api.contact.getContacts.useQuery();
+
+  if (isError) return <>An Error occurred while loading all contacts</>;
+
+  return (
+    <ul className="list-group">
+      {contactData?.map((contact) => {
+        const { data: userData, isError: fetchError } =
+          api.user.findUser.useQuery({
+            userId: contact.contactId,
+          });
+        if (fetchError)
+          return <li className="list-group-item">Unable to load info</li>;
+        return (
+          <li className="list-group-item">
+            <img
+              alt="Avatar"
+              className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+              src={userData?.image ?? ""}
+              // style={{ marginLeft: "0.5rem" }}
+            />
+            {userData?.name ?? "Unknown"}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export default function Home() {
   return (
     <>
       <Metadata />
       <Navbar />
       <DisplayUsername />
+      <DisplayContactsList />
       <hr />
     </>
   );

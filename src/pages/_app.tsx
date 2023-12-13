@@ -4,6 +4,7 @@ import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
 
+import "bootstrap-avatar/dist/avatar.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect } from "react";
 

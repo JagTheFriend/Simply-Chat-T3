@@ -24,14 +24,16 @@ function DisplayUsername() {
         paddingTop: "1rem",
         display: "flex",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      Welcome {currentSessionData?.user?.name}!
+      Welcome
       <img
         alt="Avatar"
         className="avatar avatar-48 bg-light rounded-circle text-white p-2"
         src={currentSessionData?.user.image ?? ""}
-      />
+      />{" "}
+      {currentSessionData?.user?.name}!
     </div>
   );
 }

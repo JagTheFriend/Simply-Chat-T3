@@ -1,7 +1,7 @@
 import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
-import { DisplayContactsList } from "~/components/Contact/Contact";
+import { DisplayContactsList } from "~/components/Contact/DisplayContacts";
 import { AddNewContact } from "~/components/Contact/Modal";
 import Navbar from "~/components/Navbar";
 

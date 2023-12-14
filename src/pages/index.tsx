@@ -29,14 +29,20 @@ function DisplayUsername() {
         alignItems: "center",
       }}
     >
-      Welcome
-      <img
-        alt="Avatar"
-        className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-        src={currentSessionData?.user.image ?? ""}
-        style={{ marginLeft: "0.5rem" }}
-      />{" "}
-      {currentSessionData?.user?.name}!
+      {currentSessionData ? (
+        <>
+          Welcome
+          <img
+            alt="Avatar"
+            className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+            src={currentSessionData?.user.image ?? ""}
+            style={{ marginLeft: "0.5rem" }}
+          />{" "}
+          {currentSessionData.user.name}!
+        </>
+      ) : (
+        "Please Sign In!"
+      )}
     </div>
   );
 }

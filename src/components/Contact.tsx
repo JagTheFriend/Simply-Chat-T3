@@ -1,6 +1,37 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
 
+function Form() {
+  return (
+    <div className="form-floating mb-3">
+      <input
+        type="email"
+        className="form-control"
+        id="contactEmail"
+        placeholder="name@example.com"
+      />
+      <label htmlFor={"contactEmail"}>Contact's Email address</label>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <div className="modal-footer">
+      <button
+        type="button"
+        className="btn btn-secondary"
+        data-bs-dismiss="modal"
+      >
+        Close
+      </button>
+      <button type="button" className="btn btn-success">
+        Add Contact
+      </button>
+    </div>
+  );
+}
+
 function AddNewContactModal() {
   return (
     <div
@@ -23,19 +54,10 @@ function AddNewContactModal() {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">...</div>
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" className="btn btn-success">
-              Add Contact
-            </button>
+          <div className="modal-body">
+            <Form />
           </div>
+          <Footer />
         </div>
       </div>
     </div>

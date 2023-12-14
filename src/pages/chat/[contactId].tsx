@@ -29,19 +29,16 @@ function SendButton() {
 function MessageForum() {
   return (
     <div className="fixed-bottom" style={{ margin: "1rem" }}>
-      <div className="form-floating input-group">
-        <input
-          type="text"
-          className="form-control"
-          id="floatingMessageInput"
-          placeholder="Hello World"
-        />
-        <label
-          htmlFor="floatingMessageInput"
-          style={{ display: "flex", alignItems: "center" }}
-        >
-          Enter Message
-        </label>
+      <div className="input-group">
+        <div className="form-floating">
+          <input
+            type="text"
+            className="form-control"
+            id="messageInputForm"
+            placeholder="Hello World"
+          />
+          <label htmlFor="messageInputForm">Send Message</label>
+        </div>
         <button className="btn btn-success" type="button">
           <SendButton />
         </button>

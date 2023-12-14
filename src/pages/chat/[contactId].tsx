@@ -6,24 +6,49 @@ import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
+function SendButton() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#fff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="feather feather-send"
+    >
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </svg>
+  );
+}
+
 function MessageForum() {
   return (
-    <>
-      <div className="form-floating">
-        <input
-          type="text"
-          className="form-control"
-          id="floatingMessageInput"
-          placeholder="Hello World"
-        />
-        <label
-          htmlFor="floatingMessageInput"
-          style={{ display: "flex", alignItems: "center" }}
-        >
-          Enter Message
-        </label>
+    <div className="fixed-bottom" style={{ margin: "1rem" }}>
+      <div className="input-group">
+        <div className="form-floating input-group">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingMessageInput"
+            placeholder="Hello World"
+          />
+          <label
+            htmlFor="floatingMessageInput"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            Enter Message
+          </label>
+          <button className="btn btn-success" type="button">
+            <SendButton />
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -80,18 +80,16 @@ model Contact {
 
 model Message {
     id         String @id @default(cuid())
-    chatId     String @unique @default(cuid())
     content    String
     receiverId String
-
-    dateCreated DateTime @default(now())
-    dateUpdated DateTime @updatedAt
 
     sender   User   @relation(fields: [senderId], references: [id])
     senderId String
 
-    @@index([id, chatId])
-    @@index([chatId, content])
+    dateCreated DateTime @default(now())
+    dateUpdated DateTime @updatedAt
+
+    @@index([id, content])
     @@index([senderId, receiverId])
     @@index([receiverId, senderId])
 }

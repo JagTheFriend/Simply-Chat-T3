@@ -17,7 +17,7 @@ export default function UserProfile({
         width={"100"}
         height={"100"}
       />{" "}
-      {username}!
+      {username}
     </div>
   );
 }

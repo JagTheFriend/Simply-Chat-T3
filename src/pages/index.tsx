@@ -37,6 +37,7 @@ function DisplayUsername() {
             avatar={currentSessionData.user.image}
             username={currentSessionData.user.name}
           />
+          !
         </>
       ) : (
         <button className="btn btn-primary" onClick={() => void signIn()}>

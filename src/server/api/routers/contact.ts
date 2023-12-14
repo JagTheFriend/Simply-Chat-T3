@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const contactRouter = createTRPCRouter({
   createContact: protectedProcedure
-    .input(z.object({ contactId: z.string(), ownerId: z.string() }))
+    .input(z.object({ contactId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       // Add contact twice
       await ctx.db.contact.create({

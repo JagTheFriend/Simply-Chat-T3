@@ -48,6 +48,9 @@ function DisplayUsername() {
 }
 
 function DisplayContactsList() {
+  const { data } = useSession();
+  if (!data) return <></>;
+
   const { data: contactData, isError } = api.contact.getContacts.useQuery();
 
   if (isError) return <>An Error occurred while loading all contacts</>;

@@ -4,7 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 export const contactRouter = createTRPCRouter({
   createContact: protectedProcedure
     .input(z.object({ contactId: z.string(), ownerId: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       // Add contact twice
       await ctx.db.contact.create({
         data: {
@@ -23,7 +23,7 @@ export const contactRouter = createTRPCRouter({
 
   deleteContact: protectedProcedure
     .input(z.object({ contactId: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       // Delete contact twice
       await ctx.db.contact.delete({
         where: {

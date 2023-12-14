@@ -50,7 +50,8 @@ export function DisplayContactsList() {
               alt="Avatar"
               className="avatar avatar-48 bg-light rounded-circle text-white p-2"
               src={userData?.image ?? ""}
-              // style={{ marginLeft: "0.5rem" }}
+              width={"100"}
+              height={"100"}
             />
             {userData?.name ?? "Unknown"}
           </li>

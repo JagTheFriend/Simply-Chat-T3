@@ -37,6 +37,8 @@ function DisplayUsername() {
             className="avatar avatar-48 bg-light rounded-circle text-white p-2"
             src={currentSessionData?.user.image ?? ""}
             style={{ marginLeft: "0.5rem" }}
+            width={"100"}
+            height={"100"}
           />{" "}
           {currentSessionData.user.name}!
         </>

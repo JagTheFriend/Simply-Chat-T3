@@ -18,7 +18,7 @@ function DisplayResult() {
       <hr />
       <div
         style={{
-          fontSize: "19px",
+          fontSize: "21px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -223,7 +223,7 @@ function ContactItem({ contactId }: { contactId: string }) {
           display: "flex",
           alignItems: "center",
           flexDirection: "row",
-          fontSize: "19px",
+          fontSize: "21px",
         }}
       >
         <Image

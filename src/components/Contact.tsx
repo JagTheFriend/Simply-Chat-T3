@@ -30,9 +30,14 @@ function DisplayResult({ searchedContact }: { searchedContact: User }) {
   );
 }
 
-function Form() {
+function Form({
+  searchedContact,
+  setSearchedContact,
+}: {
+  searchedContact: User;
+  setSearchedContact: (user: User) => void;
+}) {
   const [currentEmail, setCurrentEmail] = useState("");
-  const [searchedContact, setSearchedContact] = useState({} as User);
   const { refetch } = api.user.findUserByEmail.useQuery(
     {
       email: currentEmail,
@@ -104,6 +109,8 @@ function Footer() {
 }
 
 function AddNewContactModal() {
+  const [searchedContact, setSearchedContact] = useState({} as User);
+
   return (
     <div
       className="modal fade"
@@ -126,7 +133,10 @@ function AddNewContactModal() {
             ></button>
           </div>
           <div className="modal-body">
-            <Form />
+            <Form
+              searchedContact={searchedContact}
+              setSearchedContact={setSearchedContact}
+            />
           </div>
           <Footer />
         </div>

@@ -1,9 +1,9 @@
 import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
 import { DisplayContactsList } from "~/components/Contact/DisplayContacts";
 import { AddNewContact } from "~/components/Contact/Modal";
 import Navbar from "~/components/Navbar";
+import UserProfile from "~/components/Profile";
 
 function Metadata() {
   return (
@@ -33,15 +33,10 @@ function DisplayUsername() {
       {currentSessionData ? (
         <>
           Welcome
-          <Image
-            alt="Avatar"
-            className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-            src={currentSessionData?.user.image ?? ""}
-            style={{ marginLeft: "0.5rem" }}
-            width={"100"}
-            height={"100"}
-          />{" "}
-          {currentSessionData.user.name}!
+          <UserProfile
+            avatar={currentSessionData.user.image}
+            username={currentSessionData.user.name}
+          />
         </>
       ) : (
         <button className="btn btn-primary" onClick={() => void signIn()}>

@@ -248,7 +248,7 @@ function ContactItem({ contactId }: { contactId: string }) {
           height={"100"}
         />
         {userData?.name ?? "Unknown"}
-        <div style={{ marginLeft: "1rem" }}>
+        <div style={{ marginLeft: "5rem" }}>
           <button type="button" className="btn btn-success">
             <svg
               xmlns="http://www.w3.org/2000/svg"

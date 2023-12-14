@@ -85,7 +85,7 @@ function Form() {
       {searchedContact?.id !== undefined && <DisplayResult />}
       <div className="d-grid">
         <button
-          className="btn btn-primary-outline"
+          className="btn btn-outline-primary"
           onClick={() => searchContact()}
           disabled={!currentEmail}
         >

@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { api } from "~/utils/api";
 
 function Form() {
@@ -8,25 +8,19 @@ function Form() {
   const [searchedContact, setSearchedContact] = useState({} as User);
   const [searchUser, setSearchUser] = useState(false);
 
-  useEffect(() => {
-    if (searchUser) {
-      const { data: contactData, isError } = api.user.findUserByEmail.useQuery({
-        email: currentEmail,
-      });
-      if (isError)
-        return alert("An Error occurred while searching for Contact's details");
+  if (searchUser) {
+    const { data: contactData, isError } = api.user.findUserByEmail.useQuery({
+      email: currentEmail,
+    });
+    if (isError)
+      return alert("An Error occurred while searching for Contact's details");
 
-      if (!contactData)
-        return alert(`Contact with email ${currentEmail} not found`);
+    if (!contactData)
+      return alert(`Contact with email ${currentEmail} not found`);
 
-      console.log(
-        "🚀 ~ file: Contact.tsx:24 ~ useEffect ~ contactData:",
-        contactData
-      );
-      setSearchedContact(contactData);
-    }
+    setSearchedContact(contactData);
     setSearchUser(false);
-  }, [searchUser]);
+  }
 
   return (
     <>
@@ -64,6 +58,8 @@ function Form() {
             {searchedContact.name}
           </div>
           <hr />
+        </>
+      )}
       <button
         className="btn btn-primary"
         onClick={() => setSearchUser(true)}

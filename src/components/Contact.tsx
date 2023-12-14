@@ -3,6 +3,33 @@ import Image from "next/image";
 import { useState } from "react";
 import { api } from "~/utils/api";
 
+function DisplayResult({ searchedContact }: { searchedContact: User }) {
+  return (
+    <>
+      <hr />
+      <div
+        style={{
+          fontSize: "19px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          alt="Avatar"
+          className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+          src={searchedContact.image ?? ""}
+          style={{ marginLeft: "0.5rem" }}
+          width={"100"}
+          height={"100"}
+        />{" "}
+        {searchedContact.name}
+      </div>
+      <hr />
+    </>
+  );
+}
+
 function Form() {
   const [currentEmail, setCurrentEmail] = useState("");
   const [searchedContact, setSearchedContact] = useState({} as User);
@@ -13,10 +40,10 @@ function Form() {
       email: currentEmail,
     });
     if (isError)
-      return alert("An Error occurred while searching for Contact's details");
+      return <>An Error occurred while searching for Contact's details</>;
 
     if (!contactData)
-      return alert(`Contact with email ${currentEmail} not found`);
+      return <>{`Contact with email ${currentEmail} not found`}</>;
 
     setSearchedContact(contactData);
     setSearchUser(false);
@@ -36,29 +63,8 @@ function Form() {
         />
         <label htmlFor={"contactEmail"}>Contact's Email address</label>
       </div>
-      {searchedContact.id !== undefined && (
-        <>
-          <hr />
-          <div
-            style={{
-              fontSize: "19px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              alt="Avatar"
-              className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-              src={searchedContact.image ?? ""}
-              style={{ marginLeft: "0.5rem" }}
-              width={"100"}
-              height={"100"}
-            />{" "}
-            {searchedContact.name}
-          </div>
-          <hr />
-        </>
+      {searchedContact?.id !== undefined && (
+        <DisplayResult searchedContact={searchedContact} />
       )}
       <button
         className="btn btn-primary"

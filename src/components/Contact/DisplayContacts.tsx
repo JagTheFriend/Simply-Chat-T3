@@ -21,9 +21,13 @@ function ContactItem({ contactId }: { contactId: string }) {
   });
 
   if (fetchError)
-    return <li className="list-group-item">Unable to load info</li>;
+    return (
+      <li className="list-group-item" key={`${contactId}.404`}>
+        Unable to load info
+      </li>
+    );
   return (
-    <li className="list-group-item">
+    <li className="list-group-item" key={`${contactId}`}>
       <div
         style={{
           display: "flex",

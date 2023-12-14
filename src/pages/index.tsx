@@ -22,7 +22,7 @@ function DisplayUsername() {
   return (
     <div
       style={{
-        fontSize: "19px",
+        fontSize: "21px",
         paddingTop: "1rem",
         display: "flex",
         justifyContent: "center",

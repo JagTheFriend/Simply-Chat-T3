@@ -6,6 +6,27 @@ import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
+function MessageForum() {
+  return (
+    <>
+      <div className="form-floating">
+        <input
+          type="text"
+          className="form-control"
+          id="floatingMessageInput"
+          placeholder="Hello World"
+        />
+        <label
+          htmlFor="floatingMessageInput"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          Enter Message
+        </label>
+      </div>
+    </>
+  );
+}
+
 function GoBack() {
   return (
     <>
@@ -50,6 +71,7 @@ function LoadUserData({ contactId }: { contactId: string }) {
         <UserProfile username={data.name} avatar={data.image} />
       </div>
       <hr />
+      <MessageForum />
     </ContactDetailsContext.Provider>
   );
 }

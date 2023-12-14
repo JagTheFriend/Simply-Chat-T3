@@ -1,12 +1,11 @@
 import type { User } from "@prisma/client";
 import { useRouter } from "next/router";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
 function LoadUserData({ contactId }: { contactId: string }) {
-  const [contactDetail, setContactDetail] = useState({} as User);
   const { data, isError } = api.user.findUserById.useQuery(
     {
       userId: contactId,
@@ -18,12 +17,11 @@ function LoadUserData({ contactId }: { contactId: string }) {
     }
   );
   if (isError || !data) return <>{"Unable to load contact's details"}</>;
-  setContactDetail(data);
 
   return (
-    <ContactDetailsContext.Provider
-      value={contactDetail}
-    ></ContactDetailsContext.Provider>
+    <ContactDetailsContext.Provider value={data}>
+      hello
+    </ContactDetailsContext.Provider>
   );
 }
 

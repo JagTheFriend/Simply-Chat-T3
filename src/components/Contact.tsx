@@ -1,7 +1,10 @@
 import Image from "next/image";
+import { useState } from "react";
 import { api } from "~/utils/api";
 
 function Form() {
+  const [currentEmail, setCurrentEmail] = useState("");
+
   return (
     <div className="form-floating mb-3">
       <input
@@ -9,6 +12,9 @@ function Form() {
         className="form-control"
         id="contactEmail"
         placeholder="name@example.com"
+        onInput={(e) => {
+          setCurrentEmail(e.currentTarget.value);
+        }}
       />
       <label htmlFor={"contactEmail"}>Contact's Email address</label>
     </div>

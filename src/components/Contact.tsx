@@ -97,7 +97,9 @@ function Form() {
 }
 
 function Footer() {
-  const { searchedContact } = useContext(SearchedContactContext);
+  const { searchedContact, setSearchedContact } = useContext(
+    SearchedContactContext
+  );
   const { mutate } = api.contact.createContact.useMutation({
     onError: () => {
       alert(
@@ -110,9 +112,10 @@ function Footer() {
   });
 
   function addContactToUser() {
-    return mutate({
+    mutate({
       contactId: searchedContact.id,
     });
+    return setSearchedContact({} as User);
   }
 
   return (
@@ -121,6 +124,7 @@ function Footer() {
         type="button"
         className="btn btn-secondary"
         data-bs-dismiss="modal"
+        onClick={() => setSearchedContact({} as User)}
       >
         Close
       </button>
@@ -162,6 +166,7 @@ function AddNewContactModal() {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={() => setSearchedContact({} as User)}
               ></button>
             </div>
             <div className="modal-body">

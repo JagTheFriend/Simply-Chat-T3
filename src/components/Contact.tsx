@@ -1,23 +1,75 @@
+import type { User } from "@prisma/client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 
 function Form() {
   const [currentEmail, setCurrentEmail] = useState("");
+  const [searchedContact, setSearchedContact] = useState({} as User);
+  const [searchUser, setSearchUser] = useState(false);
+
+  useEffect(() => {
+    if (searchUser) {
+      const { data: contactData, isError } = api.user.findUserByEmail.useQuery({
+        email: currentEmail,
+      });
+      if (isError)
+        return alert("An Error occurred while searching for Contact's details");
+
+      if (!contactData)
+        return alert(`Contact with email ${currentEmail} not found`);
+
+      console.log(
+        "🚀 ~ file: Contact.tsx:24 ~ useEffect ~ contactData:",
+        contactData
+      );
+      setSearchedContact(contactData);
+    }
+    setSearchUser(false);
+  }, [searchUser]);
 
   return (
-    <div className="form-floating mb-3">
-      <input
-        type="email"
-        className="form-control"
-        id="contactEmail"
-        placeholder="name@example.com"
-        onInput={(e) => {
-          setCurrentEmail(e.currentTarget.value);
+    <>
+      <div className="form-floating mb-3">
+        <input
+          type="email"
+          className="form-control"
+          id="contactEmail"
+          placeholder="name@example.com"
+          onInput={(e) => {
+            setCurrentEmail(e.currentTarget.value);
+          }}
+        />
+        <label htmlFor={"contactEmail"}>Contact's Email address</label>
+      </div>
+      <hr />
+      <div
+        style={{
+          fontSize: "19px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-      />
-      <label htmlFor={"contactEmail"}>Contact's Email address</label>
-    </div>
+      >
+        <Image
+          alt="Avatar"
+          className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+          src={searchedContact.image ?? ""}
+          style={{ marginLeft: "0.5rem" }}
+          width={"100"}
+          height={"100"}
+        />{" "}
+        {searchedContact.name}
+      </div>
+      <hr />
+      <button
+        className="btn btn-primary"
+        onClick={() => setSearchUser(true)}
+        disabled={!currentEmail}
+      >
+        Search
+      </button>
+    </>
   );
 }
 
@@ -113,7 +165,7 @@ export function DisplayContactsList() {
     <ul className="list-group">
       {contactData?.map((contact) => {
         const { data: userData, isError: fetchError } =
-          api.user.findUser.useQuery({
+          api.user.findUserById.useQuery({
             userId: contact.contactId,
           });
         if (fetchError)

@@ -42,26 +42,28 @@ function Form() {
         />
         <label htmlFor={"contactEmail"}>Contact's Email address</label>
       </div>
-      <hr />
-      <div
-        style={{
-          fontSize: "19px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Image
-          alt="Avatar"
-          className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-          src={searchedContact.image ?? ""}
-          style={{ marginLeft: "0.5rem" }}
-          width={"100"}
-          height={"100"}
-        />{" "}
-        {searchedContact.name}
-      </div>
-      <hr />
+      {searchedContact.id !== undefined && (
+        <>
+          <hr />
+          <div
+            style={{
+              fontSize: "19px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              alt="Avatar"
+              className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+              src={searchedContact.image ?? ""}
+              style={{ marginLeft: "0.5rem" }}
+              width={"100"}
+              height={"100"}
+            />{" "}
+            {searchedContact.name}
+          </div>
+          <hr />
       <button
         className="btn btn-primary"
         onClick={() => setSearchUser(true)}

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Navbar from "~/components/Navbar";
 import { api } from "~/utils/api";
@@ -41,7 +41,9 @@ function DisplayUsername() {
           {currentSessionData.user.name}!
         </>
       ) : (
-        "Please Sign In!"
+        <button className="btn btn-primary" onClick={() => void signIn()}>
+          Login To Continue!
+        </button>
       )}
     </div>
   );

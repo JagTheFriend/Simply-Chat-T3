@@ -105,7 +105,7 @@ function Footer() {
       );
     },
     onSuccess: () => {
-      alert("Contact added to your Contact's list");
+      alert(`${searchedContact.name} added to your Contact's list`);
     },
   });
 
@@ -211,9 +211,23 @@ export function AddNewContact() {
 
 function ContactItem({ contactId }: { contactId: string }) {
   const { data: userData, isError: fetchError } =
-    api.user.findUserById.useQuery({
-      userId: contactId,
-    });
+    api.user.findUserById.useQuery(
+      {
+        userId: contactId,
+      },
+      {
+        refetchInterval: 1000 * 60 * 3,
+      }
+    );
+  const { mutate } = api.contact.deleteContact.useMutation({
+    onError: () => {
+      alert("An error occurred");
+    },
+    onSuccess: () => {
+      alert(`Deleted Contact ${userData?.name}`);
+    },
+  });
+
   if (fetchError)
     return <li className="list-group-item">Unable to load info</li>;
   return (
@@ -255,6 +269,11 @@ function ContactItem({ contactId }: { contactId: string }) {
             type="button"
             style={{ marginLeft: "1rem" }}
             className="btn btn-danger"
+            onClick={() =>
+              void mutate({
+                contactId: contactId,
+              })
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

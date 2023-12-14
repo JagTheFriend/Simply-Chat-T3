@@ -98,6 +98,22 @@ function Form() {
 
 function Footer() {
   const { searchedContact } = useContext(SearchedContactContext);
+  const { mutate } = api.contact.createContact.useMutation({
+    onError: () => {
+      alert(
+        "An Error occurred while adding this contact into your Contact's list"
+      );
+    },
+    onSuccess: () => {
+      alert("Contact added to your Contact's list");
+    },
+  });
+
+  function addContactToUser() {
+    return mutate({
+      contactId: searchedContact.id,
+    });
+  }
 
   return (
     <div className="modal-footer">
@@ -110,7 +126,9 @@ function Footer() {
       </button>
       <button
         type="button"
+        data-bs-dismiss="modal"
         className="btn btn-success"
+        onClick={() => addContactToUser()}
         disabled={searchedContact?.id === undefined}
       >
         Add Contact

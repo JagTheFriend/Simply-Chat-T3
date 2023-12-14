@@ -180,7 +180,12 @@ export function AddNewContact() {
     <>
       <button
         className="btn btn-primary"
-        style={{ position: "fixed", bottom: "5%", right: "4%" }}
+        style={{
+          position: "fixed",
+          bottom: "5%",
+          right: "4%",
+          borderRadius: "1rem",
+        }}
         data-bs-toggle="modal"
         data-bs-target="#addNewContactModal"
       >

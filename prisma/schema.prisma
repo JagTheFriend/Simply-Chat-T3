@@ -70,7 +70,7 @@ model Contact {
     id        String @id @default(cuid())
     contactId String
 
-    owner   User   @relation(fields: [ownerId], references: [id])
+    owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId String
 
     @@unique([ownerId, contactId])
@@ -83,7 +83,7 @@ model Message {
     content    String
     receiverId String
 
-    sender   User   @relation(fields: [senderId], references: [id])
+    sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
     senderId String
 
     dateCreated DateTime @default(now())

@@ -1,9 +1,18 @@
 import type { User } from "@prisma/client";
 import Image from "next/image";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { api } from "~/utils/api";
 
-function DisplayResult({ searchedContact }: { searchedContact: User }) {
+const SearchedContactContext = createContext({
+  searchedContact: {} as User,
+  setSearchedContact: (_user: User) => {
+    return;
+  },
+});
+
+function DisplayResult() {
+  const { searchedContact } = useContext(SearchedContactContext);
+
   return (
     <>
       <hr />
@@ -30,13 +39,11 @@ function DisplayResult({ searchedContact }: { searchedContact: User }) {
   );
 }
 
-function Form({
-  searchedContact,
-  setSearchedContact,
-}: {
-  searchedContact: User;
-  setSearchedContact: (user: User) => void;
-}) {
+function Form() {
+  const { searchedContact, setSearchedContact } = useContext(
+    SearchedContactContext
+  );
+
   const [currentEmail, setCurrentEmail] = useState("");
   const { refetch } = api.user.findUserByEmail.useQuery(
     {
@@ -75,9 +82,7 @@ function Form({
         />
         <label htmlFor={"contactEmail"}>Contact's Email address</label>
       </div>
-      {searchedContact?.id !== undefined && (
-        <DisplayResult searchedContact={searchedContact} />
-      )}
+      {searchedContact?.id !== undefined && <DisplayResult />}
       <div className="d-grid">
         <button
           className="btn btn-primary btn-outline-primary"
@@ -112,36 +117,37 @@ function AddNewContactModal() {
   const [searchedContact, setSearchedContact] = useState({} as User);
 
   return (
-    <div
-      className="modal fade"
-      id="addNewContactModal"
-      tabIndex={-1}
-      aria-labelledby="addNewContactLabel"
-      aria-hidden="true"
+    <SearchedContactContext.Provider
+      value={{ searchedContact, setSearchedContact }}
     >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title fs-5" id="addNewContactLabel">
-              Add New Contact
-            </h1>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+      <div
+        className="modal fade"
+        id="addNewContactModal"
+        tabIndex={-1}
+        aria-labelledby="addNewContactLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="addNewContactLabel">
+                Add New Contact
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <Form />
+            </div>
+            <Footer />
           </div>
-          <div className="modal-body">
-            <Form
-              searchedContact={searchedContact}
-              setSearchedContact={setSearchedContact}
-            />
-          </div>
-          <Footer />
         </div>
       </div>
-    </div>
+    </SearchedContactContext.Provider>
   );
 }
 

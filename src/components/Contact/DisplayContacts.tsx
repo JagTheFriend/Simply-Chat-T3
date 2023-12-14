@@ -1,5 +1,5 @@
-import { api } from "~/utils/api";
 import Image from "next/image";
+import { api } from "~/utils/api";
 
 function ContactItem({ contactId }: { contactId: string }) {
   const { data: userData, isError: fetchError } =
@@ -92,7 +92,14 @@ function ContactItem({ contactId }: { contactId: string }) {
 }
 
 export function DisplayContactsList() {
-  const { data: contactData, isError } = api.contact.getContacts.useQuery();
+  const { data: contactData, isError } = api.contact.getContacts.useQuery(
+    undefined,
+    {
+      refetchInterval: 1000 * 60 * 3,
+      refetchIntervalInBackground: true,
+      refetchOnReconnect: true,
+    }
+  );
 
   if (isError) return <>An Error occurred while loading all contacts</>;
 

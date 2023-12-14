@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 
 function ContactItem({ contactId }: { contactId: string }) {
+  const router = useRouter();
   const { data: userData, isError: fetchError } =
     api.user.findUserById.useQuery(
       {
@@ -41,7 +43,13 @@ function ContactItem({ contactId }: { contactId: string }) {
         />
         {userData?.name ?? "Unknown"}
         <div style={{ marginLeft: "5rem" }}>
-          <button type="button" className="btn btn-success">
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={async () => {
+              await router.push(`/chat/${contactId}`);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

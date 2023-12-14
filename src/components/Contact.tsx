@@ -33,20 +33,27 @@ function DisplayResult({ searchedContact }: { searchedContact: User }) {
 function Form() {
   const [currentEmail, setCurrentEmail] = useState("");
   const [searchedContact, setSearchedContact] = useState({} as User);
-  const [searchUser, setSearchUser] = useState(false);
-
-  if (searchUser) {
-    const { data: contactData, isError } = api.user.findUserByEmail.useQuery({
+  const { refetch } = api.user.findUserByEmail.useQuery(
+    {
       email: currentEmail,
-    });
-    if (isError)
-      return <>An Error occurred while searching for Contact's details</>;
+    },
+    {
+      enabled: false,
+    }
+  );
 
-    if (!contactData)
-      return <>{`Contact with email ${currentEmail} not found`}</>;
+  async function searchContact() {
+    // Reset data
+    setSearchedContact({} as User);
+
+    const { data: contactData, isError } = await refetch();
+
+    if (isError)
+      return alert("An Error occurred while searching for Contact's details");
+
+    if (!contactData) return alert(`Email ${currentEmail} not found`);
 
     setSearchedContact(contactData);
-    setSearchUser(false);
   }
 
   return (
@@ -68,7 +75,7 @@ function Form() {
       )}
       <button
         className="btn btn-primary"
-        onClick={() => setSearchUser(true)}
+        onClick={() => searchContact()}
         disabled={!currentEmail}
       >
         Search

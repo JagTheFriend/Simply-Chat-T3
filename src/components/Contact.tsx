@@ -179,7 +179,7 @@ export function AddNewContact() {
   return (
     <>
       <button
-        className="btn btn-success"
+        className="btn btn-primary"
         style={{ position: "fixed", bottom: "5%", right: "4%" }}
         data-bs-toggle="modal"
         data-bs-target="#addNewContactModal"

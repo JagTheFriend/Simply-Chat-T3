@@ -209,6 +209,27 @@ export function AddNewContact() {
   );
 }
 
+function ContactItem({ contactId }: { contactId: string }) {
+  const { data: userData, isError: fetchError } =
+    api.user.findUserById.useQuery({
+      userId: contactId,
+    });
+  if (fetchError)
+    return <li className="list-group-item">Unable to load info</li>;
+  return (
+    <li className="list-group-item">
+      <Image
+        alt="Avatar"
+        className="avatar avatar-48 bg-light rounded-circle text-white p-2"
+        src={userData?.image ?? ""}
+        width={"100"}
+        height={"100"}
+      />
+      {userData?.name ?? "Unknown"}
+    </li>
+  );
+}
+
 export function DisplayContactsList() {
   const { data: contactData, isError } = api.contact.getContacts.useQuery();
 
@@ -216,26 +237,9 @@ export function DisplayContactsList() {
 
   return (
     <ul className="list-group">
-      {contactData?.map((contact) => {
-        const { data: userData, isError: fetchError } =
-          api.user.findUserById.useQuery({
-            userId: contact.contactId,
-          });
-        if (fetchError)
-          return <li className="list-group-item">Unable to load info</li>;
-        return (
-          <li className="list-group-item">
-            <Image
-              alt="Avatar"
-              className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-              src={userData?.image ?? ""}
-              width={"100"}
-              height={"100"}
-            />
-            {userData?.name ?? "Unknown"}
-          </li>
-        );
-      })}
+      {contactData?.map((contact) => (
+        <ContactItem contactId={contact.contactId} />
+      ))}
     </ul>
   );
 }

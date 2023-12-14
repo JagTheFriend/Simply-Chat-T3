@@ -97,6 +97,8 @@ function Form() {
 }
 
 function Footer() {
+  const { searchedContact } = useContext(SearchedContactContext);
+
   return (
     <div className="modal-footer">
       <button
@@ -106,7 +108,11 @@ function Footer() {
       >
         Close
       </button>
-      <button type="button" className="btn btn-success">
+      <button
+        type="button"
+        className="btn btn-success"
+        disabled={searchedContact?.id === undefined}
+      >
         Add Contact
       </button>
     </div>

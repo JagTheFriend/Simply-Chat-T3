@@ -2,10 +2,16 @@ import type { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import UserProfile from "~/components/Profile";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
+
+export const socket = io({
+  path: "/api/socket",
+  closeOnBeforeunload: false,
+});
 
 function SendButton({
   messageContent,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-export const userRouter = createTRPCRouter({
+export const messageRouter = createTRPCRouter({
   createMessage: protectedProcedure
     .input(z.object({ receiverId: z.string(), content: z.string() }))
     .mutation(async ({ ctx, input }) => {

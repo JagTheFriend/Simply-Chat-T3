@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
+import UserProfile from "../Profile";
 
 function ContactItem({ contactId }: { contactId: string }) {
   const router = useRouter();
@@ -34,14 +34,7 @@ function ContactItem({ contactId }: { contactId: string }) {
           fontSize: "21px",
         }}
       >
-        <Image
-          alt="Avatar"
-          className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-          src={userData?.image ?? ""}
-          width={"100"}
-          height={"100"}
-        />
-        {userData?.name ?? "Unknown"}
+        <UserProfile username={userData?.name} avatar={userData?.image} />
         <div style={{ marginLeft: "5rem" }}>
           <button
             type="button"

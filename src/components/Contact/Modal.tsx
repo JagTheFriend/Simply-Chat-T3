@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
-import Image from "next/image";
 import { createContext, useContext, useState } from "react";
 import { api } from "~/utils/api";
+import UserProfile from "../Profile";
 
 const SearchedContactContext = createContext({
   searchedContact: {} as User,
@@ -24,15 +24,10 @@ function DisplayResult() {
           alignItems: "center",
         }}
       >
-        <Image
-          alt="Avatar"
-          className="avatar avatar-48 bg-light rounded-circle text-white p-2"
-          src={searchedContact.image ?? ""}
-          style={{ marginLeft: "0.5rem" }}
-          width={"100"}
-          height={"100"}
-        />{" "}
-        {searchedContact.name}
+        <UserProfile
+          username={searchedContact.name}
+          avatar={searchedContact.image}
+        />
       </div>
       <hr />
     </>

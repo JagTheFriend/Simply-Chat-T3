@@ -1,32 +1,40 @@
 import type { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import UserProfile from "~/components/Profile";
 
 const ContactDetailsContext = createContext({} as User);
 
-function SendButton() {
+function SendButton({ messageContent }: { messageContent: string }) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#fff"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="feather feather-send"
+    <button
+      className="btn btn-success"
+      type="button"
+      disabled={!messageContent}
     >
-      <line x1="22" y1="2" x2="11" y2="13"></line>
-      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-    </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="feather feather-send"
+      >
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
   );
 }
 
 function MessageForum() {
+  const [messageContent, setMessageContent] = useState("");
+
   return (
     <div className="fixed-bottom" style={{ margin: "1rem" }}>
       <div className="input-group">
@@ -36,12 +44,11 @@ function MessageForum() {
             className="form-control"
             id="messageInputForm"
             placeholder="Hello World"
+            onChange={(e) => setMessageContent(e.target.value)}
           />
           <label htmlFor="messageInputForm">Send Message</label>
         </div>
-        <button className="btn btn-success" type="button">
-          <SendButton />
-        </button>
+        <SendButton messageContent={messageContent} />
       </div>
     </div>
   );

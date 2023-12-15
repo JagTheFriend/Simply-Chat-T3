@@ -1,8 +1,8 @@
 import type { User } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import UserProfile from "~/components/Profile";
-import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
@@ -49,7 +49,7 @@ function MessageForum() {
 
 function GoBack() {
   return (
-    <>
+    <Link href={"/"} shallow={true}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -65,30 +65,20 @@ function GoBack() {
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
-    </>
+    </Link>
   );
 }
 
-function LoadUserData({ contactId }: { contactId: string }) {
-  const { data, isError } = api.user.findUserById.useQuery(
-    {
-      userId: contactId,
-    },
-    {
-      refetchInterval: 1000 * 60 * 4,
-      refetchIntervalInBackground: true,
-      refetchOnReconnect: true,
-    }
-  );
-  if (isError || !data) return <>{"Unable to load contact's details"}</>;
+function LoadUserData({ contactData }: { contactData: User }) {
+  if (!contactData) return <>{"Unable to load contact's details"}</>;
 
   return (
-    <ContactDetailsContext.Provider value={data}>
+    <ContactDetailsContext.Provider value={contactData}>
       <div
         style={{ display: "flex", alignItems: "center", paddingTop: "1rem" }}
       >
         <GoBack />
-        <UserProfile username={data.name} avatar={data.image} />
+        <UserProfile username={contactData.name} avatar={contactData.image} />
       </div>
       <hr />
       <MessageForum />
@@ -98,13 +88,20 @@ function LoadUserData({ contactId }: { contactId: string }) {
 
 export default function Chat() {
   const router = useRouter();
-  const contactId = router.query.contactId as string;
+  const { query } = router;
+  const contactData = JSON.parse((query.data as string) ?? "{}") as User;
 
-  if (!contactId) return <>{"Provide a valid contact ID"}</>;
+  useEffect(() => {
+    // Remove all the query params and
+    // Display username rather than userId
+    window.history.replaceState(null, "", `/chat/${contactData.name}`);
+  }, []);
+
+  if (!contactData) return <>{"Provide a valid contact ID"}</>;
 
   return (
     <div className="container" style={{ fontSize: "21px" }}>
-      <LoadUserData contactId={contactId} />
+      <LoadUserData contactData={contactData} />
     </div>
   );
 }

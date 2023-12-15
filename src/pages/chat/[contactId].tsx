@@ -2,10 +2,55 @@ import type { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
+import { io as ClientIO, type Socket } from "socket.io-client";
 import UserProfile from "~/components/Profile";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
+
+type SocketContextType = {
+  isConnected: boolean;
+  socket: Socket | null | undefined;
+};
+
+const SocketContext = createContext<SocketContextType>({
+  isConnected: false,
+  socket: null,
+});
+
+function SocketProvider({ children }: { children: React.ReactNode }) {
+  const [socket, setSocket] = useState<Socket | null | undefined>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  useEffect(() => {
+    const socketInstance = ClientIO(process.env.NEXT_PUBLIC_SITE_URL!, {
+      path: "/api/socket/io",
+      addTrailingSlash: false,
+    });
+    socketInstance.on("connect", () => {
+      setIsConnected(true);
+    });
+
+    socketInstance.on("disconnect", () => {
+      setIsConnected(false);
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  return (
+    <SocketContext.Provider value={{ socket, isConnected }}>
+      {children}
+    </SocketContext.Provider>
+  );
+}
+
+function DisplayMessages() {
+  return <></>;
+}
 
 function SendButton({
   messageContent,
@@ -135,6 +180,9 @@ export default function Chat() {
   return (
     <div className="container" style={{ fontSize: "21px" }}>
       <LoadUserData contactData={contactData} />
+      <SocketProvider>
+        <DisplayMessages />
+      </SocketProvider>
     </div>
   );
 }

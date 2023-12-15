@@ -23,9 +23,13 @@ function ContactItem({ contactId }: { contactId: string }) {
   });
 
   if (fetchError)
-    return <li className="list-group-item">Unable to load info</li>;
+    return (
+      <li key={`${Math.random()}`} className="list-group-item">
+        Unable to load info
+      </li>
+    );
   return (
-    <li className="list-group-item">
+    <li key={`${Math.random()}`} className="list-group-item">
       <div
         style={{
           display: "flex",
@@ -113,7 +117,7 @@ export function DisplayContactsList() {
   return (
     <ul className="list-group">
       {contactData?.map((contact) => (
-        <ContactItem contactId={contact.contactId} />
+        <ContactItem key={`${Math.random()}`} contactId={contact.contactId} />
       ))}
     </ul>
   );

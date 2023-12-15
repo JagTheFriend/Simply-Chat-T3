@@ -10,7 +10,9 @@ function ContactItem({ contactId }: { contactId: string }) {
         userId: contactId,
       },
       {
-        enabled: false
+        refetchInterval: 1000 * 60 * 3,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
       }
     );
   const { mutate } = api.contact.deleteContact.useMutation({
@@ -108,7 +110,8 @@ export function DisplayContactsList() {
     {
       refetchInterval: 1000 * 60 * 3,
       refetchIntervalInBackground: true,
-      refetchOnReconnect: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
     }
   );
 

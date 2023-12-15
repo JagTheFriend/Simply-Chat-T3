@@ -10,7 +10,7 @@ function ContactItem({ contactId }: { contactId: string }) {
         userId: contactId,
       },
       {
-        refetchInterval: 1000 * 60 * 3,
+        enabled: false
       }
     );
   const { mutate } = api.contact.deleteContact.useMutation({

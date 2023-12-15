@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
+import Image from "next/image";
 import { createContext, useContext, useState } from "react";
 import { api } from "~/utils/api";
-import Image from "next/image";
 
 const SearchedContactContext = createContext({
   searchedContact: {} as User,
@@ -185,7 +185,7 @@ function Footer() {
       );
     },
     onSuccess: () => {
-      alert(`${searchedContact.name} added to your Contact's list`);
+      alert(`User added to your Contact's list`);
     },
   });
 

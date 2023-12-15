@@ -15,21 +15,30 @@ export const userRouter = createTRPCRouter({
     }),
 
   deleteMessage: protectedProcedure
-    .input(z.object({ email: z.string() }))
+    .input(z.object({ messageId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.user.findUnique({
         where: {
-          email: input.email,
+          id: input.messageId,
         },
       });
     }),
 
   getMessages: protectedProcedure
-    .input(z.object({ email: z.string() }))
+    .input(z.object({ contactId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.user.findUnique({
+      return await ctx.db.message.findMany({
         where: {
-          email: input.email,
+          OR: [
+            {
+              senderId: ctx.session.user.id,
+              receiverId: input.contactId,
+            },
+            {
+              senderId: input.contactId,
+              receiverId: ctx.session.user.id,
+            },
+          ],
         },
       });
     }),

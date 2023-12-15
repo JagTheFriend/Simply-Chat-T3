@@ -1,17 +1,30 @@
 import type { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import UserProfile from "~/components/Profile";
+import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
 function SendButton({ messageContent }: { messageContent: string }) {
+  const contactDetails = useContext(ContactDetailsContext);
+  const { mutate } = api.message.createMessage.useMutation({
+    onError: () => {
+      alert("An Error occurred while sending message");
+    },
+  });
   return (
     <button
       className="btn btn-success"
       type="button"
       disabled={!messageContent}
+      onClick={() => {
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+      }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

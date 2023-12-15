@@ -7,24 +7,34 @@ import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
-function SendButton({ messageContent }: { messageContent: string }) {
+function SendButton({
+  messageContent,
+  setMessageContent,
+}: {
+  messageContent: string;
+  setMessageContent: (value: string) => void;
+}) {
   const contactDetails = useContext(ContactDetailsContext);
   const { mutate } = api.message.createMessage.useMutation({
     onError: () => {
       alert("An Error occurred while sending message");
     },
+    onSuccess: () => {
+      setMessageContent("");
+    },
   });
+
   return (
     <button
       className="btn btn-success"
       type="button"
       disabled={!messageContent}
-      onClick={() => {
+      onClick={() =>
         mutate({
           content: messageContent,
           receiverId: contactDetails.id,
-        });
-      }}
+        })
+      }
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +71,10 @@ function MessageForum() {
           />
           <label htmlFor="messageInputForm">Send Message</label>
         </div>
-        <SendButton messageContent={messageContent} />
+        <SendButton
+          messageContent={messageContent}
+          setMessageContent={setMessageContent}
+        />
       </div>
     </div>
   );

@@ -34,6 +34,7 @@ function DisplayMessages() {
               display: "flex",
               alignItems: "baseline",
               background: "#f5f4f4",
+              marginBottom: "0.5rem",
             }}
             key={`${Math.random()}`}
           >

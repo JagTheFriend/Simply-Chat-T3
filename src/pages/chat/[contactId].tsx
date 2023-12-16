@@ -10,6 +10,21 @@ import { api } from "~/utils/api";
 const ContactDetailsContext = createContext({} as User);
 
 function DisplayMessages() {
+  const { id: contactId } = useContext(ContactDetailsContext);
+  const { data: messageData, isError } = api.message.getMessages.useQuery(
+    {
+      contactId,
+    },
+    {
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: 1000 * 60 * 3,
+    }
+  );
+
+  if (isError) return "Unable to load messages";
+
   return <></>;
 }
 

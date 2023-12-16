@@ -1,14 +1,21 @@
 import type { User } from "@prisma/client";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import UserProfile from "~/components/Profile";
-import { SocketProvider } from "~/components/Proviers/SocketProvider";
+import {
+  SocketContext,
+  SocketProvider,
+} from "~/components/Providers/SocketProvider";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
 function DisplayMessages() {
+  const { socket } = useContext(SocketContext);
+  socket?.io.on("open", () => console.log("Connected"));
   return <></>;
 }
 
@@ -19,12 +26,18 @@ function SendButton({
   messageContent: string;
   setMessageContent: (value: string) => void;
 }) {
+  const { data } = useSession();
   const contactDetails = useContext(ContactDetailsContext);
   const { mutate } = api.message.createMessage.useMutation({
     onError: () => {
       alert("An Error occurred while sending message");
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await axios.post(`/api/socket/message`, {
+        receiverId: contactDetails.id,
+        senderId: data?.user.id ?? "Unknown",
+        content: messageContent,
+      });
       setMessageContent("");
     },
   });
@@ -72,6 +85,7 @@ function MessageForum() {
             className="form-control"
             id="messageInputForm"
             placeholder="Hello World"
+            value={messageContent}
             onChange={(e) => setMessageContent(e.target.value)}
           />
           <label htmlFor="messageInputForm">Send Message</label>

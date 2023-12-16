@@ -20,6 +20,7 @@ function SendButton({
   messageContent: string;
   setMessageContent: (value: string) => void;
 }) {
+  const util = api.useUtils();
   const { data } = useSession();
   const contactDetails = useContext(ContactDetailsContext);
   const { mutate } = api.message.createMessage.useMutation({
@@ -32,6 +33,7 @@ function SendButton({
         senderId: data?.user.id ?? "Unknown",
         content: messageContent,
       });
+      await util.message.getMessages.invalidate();
       setMessageContent("");
     },
   });

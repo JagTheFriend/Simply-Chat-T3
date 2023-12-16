@@ -78,12 +78,88 @@ function SendButton({
       className="btn btn-success"
       type="button"
       disabled={!messageContent}
-      onClick={() =>
+      onClick={() => {
         mutate({
           content: messageContent,
           receiverId: contactDetails.id,
-        })
-      }
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+        mutate({
+          content: messageContent,
+          receiverId: contactDetails.id,
+        });
+      }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +185,7 @@ function MessageForum() {
   const inputFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
+    inputFormRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, []);
 
   return (

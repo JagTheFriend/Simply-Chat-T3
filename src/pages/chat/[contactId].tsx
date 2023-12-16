@@ -15,7 +15,11 @@ const ContactDetailsContext = createContext({} as User);
 
 function DisplayMessages() {
   const { socket } = useContext(SocketContext);
-  socket?.io.on("open", () => console.log("Connected"));
+  useEffect(() => {
+    socket?.on("create", (data) => {
+      console.log(data);
+    });
+  }, []);
   return <></>;
 }
 

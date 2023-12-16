@@ -2,7 +2,7 @@ import type { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import UserProfile from "~/components/Profile";
 import { api } from "~/utils/api";
 
@@ -106,9 +106,14 @@ function SendButton({
 
 function MessageForum() {
   const [messageContent, setMessageContent] = useState("");
+  const inputFormRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   return (
-    <div className="input-group">
+    <div className="input-group" ref={inputFormRef}>
       <div className="form-floating">
         <input
           type="text"

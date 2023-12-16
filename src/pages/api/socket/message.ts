@@ -13,7 +13,7 @@ export default function handler(
 ) {
   if (req.method === "POST") {
     const { content, senderId, receiverId } = req.body as BodyType;
-    res?.socket?.server?.io?.emit("create", {
+    res?.socket?.server?.io?.sockets.emit("create", {
       data: { content, senderId, receiverId },
     });
   }

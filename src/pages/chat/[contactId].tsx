@@ -5,21 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import UserProfile from "~/components/Profile";
-import {
-  SocketContext,
-  SocketProvider,
-} from "~/components/Providers/SocketProvider";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
 
 function DisplayMessages() {
-  const { socket } = useContext(SocketContext);
-  useEffect(() => {
-    socket?.on("create", (data) => {
-      console.log(data);
-    });
-  }, []);
   return <></>;
 }
 
@@ -151,14 +141,12 @@ export default function Chat() {
 
   return (
     <div className="container" style={{ fontSize: "21px" }}>
-      <SocketProvider>
-        <ContactDetailsContext.Provider value={contactData}>
-          <LoadUserData contactData={contactData} />
-          <hr />
-          <MessageForum />
-        </ContactDetailsContext.Provider>
+      <ContactDetailsContext.Provider value={contactData}>
+        <LoadUserData contactData={contactData} />
+        <hr />
+        <MessageForum />
         <DisplayMessages />
-      </SocketProvider>
+      </ContactDetailsContext.Provider>
     </div>
   );
 }

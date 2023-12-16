@@ -29,35 +29,24 @@ function DisplayMessages() {
     <>
       {messageData?.map((message) => {
         return (
-          <div key={`${Math.random()}`}>
+          <div
+            key={`${Math.random()}`}
+            style={{
+              background: message.senderId === contactId ? "#f5f4f4" : "#fff",
+              display: "flex",
+              alignItems: "baseline",
+              marginBottom: "0.5rem",
+            }}
+          >
             {message.senderId === contactId ? (
-              <div
-                style={{
-                  background: "#f5f4f4",
-                  display: "flex",
-                  alignItems: "baseline",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                <UserProfile username={name} avatar={image} />:{" "}
-                {message.content}
-              </div>
+              <UserProfile username={name} avatar={image} />
             ) : (
-              <div
-                style={{
-                  background: "#fff",
-                  display: "flex",
-                  alignItems: "baseline",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                <UserProfile
-                  username={data?.user.name}
-                  avatar={data?.user.image}
-                />
-                : {message.content}
-              </div>
+              <UserProfile
+                username={data?.user.name}
+                avatar={data?.user.image}
+              />
             )}
+            : {message.content}
           </div>
         );
       })}

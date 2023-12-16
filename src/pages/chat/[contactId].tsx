@@ -279,10 +279,8 @@ export default function Chat() {
     <div className="container" style={{ fontSize: "21px" }}>
       <ContactDetailsContext.Provider value={contactData}>
         <LoadUserData contactData={contactData} />
-        <div>
-          <DisplayMessages />
-          <MessageForum />
-        </div>
+        <DisplayMessages />
+        <MessageForum />
       </ContactDetailsContext.Provider>
     </div>
   );

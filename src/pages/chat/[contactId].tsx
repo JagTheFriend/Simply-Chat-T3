@@ -185,7 +185,7 @@ function MessageForum() {
   const inputFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    inputFormRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (

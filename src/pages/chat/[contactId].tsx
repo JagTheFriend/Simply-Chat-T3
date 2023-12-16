@@ -2,51 +2,11 @@ import type { User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
-import { io as ClientIO, type Socket } from "socket.io-client";
 import UserProfile from "~/components/Profile";
+import { SocketProvider } from "~/components/Proviers/SocketProvider";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
-
-type SocketContextType = {
-  isConnected: boolean;
-  socket: Socket | null | undefined;
-};
-
-const SocketContext = createContext<SocketContextType>({
-  isConnected: false,
-  socket: null,
-});
-
-function SocketProvider({ children }: { children: React.ReactNode }) {
-  const [socket, setSocket] = useState<Socket | null | undefined>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  useEffect(() => {
-    const socketInstance = ClientIO(process.env.NEXT_PUBLIC_SITE_URL!, {
-      path: "/api/socket/io",
-      addTrailingSlash: false,
-    });
-    socketInstance.on("connect", () => {
-      setIsConnected(true);
-    });
-
-    socketInstance.on("disconnect", () => {
-      setIsConnected(false);
-    });
-
-    setSocket(socketInstance);
-
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
-
-  return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
-      {children}
-    </SocketContext.Provider>
-  );
-}
 
 function DisplayMessages() {
   return <></>;
@@ -151,16 +111,10 @@ function LoadUserData({ contactData }: { contactData: User }) {
   if (!contactData) return <>{"Unable to load contact's details"}</>;
 
   return (
-    <ContactDetailsContext.Provider value={contactData}>
-      <div
-        style={{ display: "flex", alignItems: "center", paddingTop: "1rem" }}
-      >
-        <GoBack />
-        <UserProfile username={contactData.name} avatar={contactData.image} />
-      </div>
-      <hr />
-      <MessageForum />
-    </ContactDetailsContext.Provider>
+    <div style={{ display: "flex", alignItems: "center", paddingTop: "1rem" }}>
+      <GoBack />
+      <UserProfile username={contactData.name} avatar={contactData.image} />
+    </div>
   );
 }
 
@@ -179,8 +133,12 @@ export default function Chat() {
 
   return (
     <div className="container" style={{ fontSize: "21px" }}>
-      <LoadUserData contactData={contactData} />
       <SocketProvider>
+        <ContactDetailsContext.Provider value={contactData}>
+          <LoadUserData contactData={contactData} />
+          <hr />
+          <MessageForum />
+        </ContactDetailsContext.Provider>
         <DisplayMessages />
       </SocketProvider>
     </div>

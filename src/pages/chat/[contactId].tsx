@@ -108,24 +108,22 @@ function MessageForum() {
   const [messageContent, setMessageContent] = useState("");
 
   return (
-    <div className="fixed-bottom" style={{ margin: "1rem" }}>
-      <div className="input-group">
-        <div className="form-floating">
-          <input
-            type="text"
-            className="form-control"
-            id="messageInputForm"
-            placeholder="Hello World"
-            value={messageContent}
-            onChange={(e) => setMessageContent(e.target.value)}
-          />
-          <label htmlFor="messageInputForm">Send Message</label>
-        </div>
-        <SendButton
-          messageContent={messageContent}
-          setMessageContent={setMessageContent}
+    <div className="input-group">
+      <div className="form-floating">
+        <input
+          type="text"
+          className="form-control"
+          id="messageInputForm"
+          placeholder="Hello World"
+          value={messageContent}
+          onChange={(e) => setMessageContent(e.target.value)}
         />
+        <label htmlFor="messageInputForm">Send Message</label>
       </div>
+      <SendButton
+        messageContent={messageContent}
+        setMessageContent={setMessageContent}
+      />
     </div>
   );
 }
@@ -156,9 +154,23 @@ function LoadUserData({ contactData }: { contactData: User }) {
   if (!contactData) return <>{"Unable to load contact's details"}</>;
 
   return (
-    <div style={{ display: "flex", alignItems: "center", paddingTop: "1rem" }}>
-      <GoBack />
-      <UserProfile username={contactData.name} avatar={contactData.image} />
+    <div
+      className="sticky-top"
+      style={{
+        background: "white",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          paddingTop: "1rem",
+        }}
+      >
+        <GoBack />
+        <UserProfile username={contactData.name} avatar={contactData.image} />
+      </div>
+      <hr />
     </div>
   );
 }
@@ -186,9 +198,10 @@ export default function Chat() {
     <div className="container" style={{ fontSize: "21px" }}>
       <ContactDetailsContext.Provider value={contactData}>
         <LoadUserData contactData={contactData} />
-        <hr />
-        <MessageForum />
-        <DisplayMessages />
+        <div>
+          <DisplayMessages />
+          <MessageForum />
+        </div>
       </ContactDetailsContext.Provider>
     </div>
   );

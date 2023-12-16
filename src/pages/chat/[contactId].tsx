@@ -174,7 +174,13 @@ export default function Chat() {
     window.history.replaceState(null, "", `/chat/${contactData.name}`);
   }, []);
 
-  if (!contactData) return <>{"Provide a valid contact ID"}</>;
+  useEffect(() => {
+    if (!contactData.email) {
+      void router.push("/", {
+        slashes: false,
+      });
+    }
+  }, []);
 
   return (
     <div className="container" style={{ fontSize: "21px" }}>

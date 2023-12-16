@@ -1,5 +1,4 @@
 import type { User } from "@prisma/client";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,7 +9,8 @@ import { api } from "~/utils/api";
 const ContactDetailsContext = createContext({} as User);
 
 function DisplayMessages() {
-  const { id: contactId } = useContext(ContactDetailsContext);
+  const { id: contactId, name, image } = useContext(ContactDetailsContext);
+  const { data } = useSession();
   const { data: messageData, isError } = api.message.getMessages.useQuery(
     {
       contactId,
@@ -25,7 +25,32 @@ function DisplayMessages() {
 
   if (isError) return "Unable to load messages";
 
-  return <></>;
+  return (
+    <>
+      {messageData?.map((message) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              background: "#f5f4f4",
+            }}
+            key={`${Math.random()}`}
+          >
+            {message.senderId === contactId ? (
+              <UserProfile username={name} avatar={image} />
+            ) : (
+              <UserProfile
+                username={data?.user.name}
+                avatar={data?.user.image}
+              />
+            )}
+            : {message.content}
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 function SendButton({
@@ -36,18 +61,12 @@ function SendButton({
   setMessageContent: (value: string) => void;
 }) {
   const util = api.useUtils();
-  const { data } = useSession();
   const contactDetails = useContext(ContactDetailsContext);
   const { mutate } = api.message.createMessage.useMutation({
     onError: () => {
       alert("An Error occurred while sending message");
     },
     onSuccess: async () => {
-      await axios.post(`/api/socket/message`, {
-        receiverId: contactDetails.id,
-        senderId: data?.user.id ?? "Unknown",
-        content: messageContent,
-      });
       await util.message.getMessages.invalidate();
       setMessageContent("");
     },

@@ -40,6 +40,9 @@ export const messageRouter = createTRPCRouter({
             },
           ],
         },
+        orderBy: {
+          dateCreated: "asc",
+        },
       });
     }),
 });

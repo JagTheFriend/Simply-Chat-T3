@@ -35,15 +35,18 @@ function DisplayMessages() {
       refetchInterval: 1000 * 60 * 3,
     }
   );
-  const [displayMessageData, setDisplayMessageData] = useState<
-    Message[] | undefined
-  >([]);
+  const [displayMessageData, setDisplayMessageData] = useState<Message[]>([]);
   const { socket } = useSocket();
   const pageEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
-      setDisplayMessageData([...(displayMessageData ?? []), data]);
+      if (displayMessageData.length === 0)
+        messageData?.map((message) => {
+          displayMessageData.push(message);
+        });
+      displayMessageData.push(data);
+      setDisplayMessageData([...displayMessageData]);
     });
     return () => {
       socket?.off("newMessage");
@@ -51,10 +54,10 @@ function DisplayMessages() {
   }, [socket]);
 
   useLayoutEffect(() => {
-    if (isFetched) {
-      setDisplayMessageData(messageData);
+    if (isFetched || messageData) {
+      setDisplayMessageData(messageData ?? []);
     }
-  }, [isFetched]);
+  }, [isFetched, messageData]);
 
   useLayoutEffect(() => {
     pageEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -3,7 +3,14 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import UserProfile from "~/components/Profile";
 import { api } from "~/utils/api";
 
@@ -103,7 +110,7 @@ function MessageForum() {
   const [messageContent, setMessageContent] = useState("");
   const inputFormRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 

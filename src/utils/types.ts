@@ -9,3 +9,9 @@ export type NextApiResponseWithSocketIo = NextApiResponse & {
     };
   };
 };
+
+export type NewMessageData = {
+  content: string;
+  senderId: string;
+  receiverId: string;
+};

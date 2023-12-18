@@ -24,11 +24,15 @@ function DisplayMessages() {
       refetchInterval: 1000 * 60 * 3,
     }
   );
+  const [displayMessageData, setDisplayMessageData] = useState(
+    messageData ?? []
+  );
   const { socket } = useSocket();
 
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
-      messageData?.push(data);
+      displayMessageData.push(data);
+      setDisplayMessageData([...displayMessageData]);
     });
     return () => {
       socket?.off("newMessage");
@@ -39,7 +43,7 @@ function DisplayMessages() {
 
   return (
     <>
-      {messageData?.map((message) => {
+      {displayMessageData?.map((message) => {
         return (
           <div
             key={`${Math.random()}`}

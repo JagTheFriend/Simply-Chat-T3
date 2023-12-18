@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { Message, User } from "@prisma/client";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -34,11 +34,8 @@ function DisplayMessages() {
   const { socket } = useSocket();
 
   useEffect(() => {
-    socket?.on("newMessage", (data) => {
-      console.log(
-        "🚀 ~ file: [contactId].tsx:36 ~ socket.socket?.on ~ data:",
-        data
-      );
+    socket?.on("newMessage", (data: Message) => {
+      messageData?.push(data);
     });
     return () => {
       socket?.off("newMessage");

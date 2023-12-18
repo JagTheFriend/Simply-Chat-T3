@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 import UserProfile from "~/components/Profile";
+import { SocketProvider } from "~/components/Provider/Socket";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
@@ -203,11 +204,13 @@ export default function Chat() {
 
   return (
     <div className="container" style={{ fontSize: "21px" }}>
-      <ContactDetailsContext.Provider value={contactData}>
-        <LoadUserData contactData={contactData} />
-        <DisplayMessages />
-        <MessageForum />
-      </ContactDetailsContext.Provider>
+      <SocketProvider>
+        <ContactDetailsContext.Provider value={contactData}>
+          <LoadUserData contactData={contactData} />
+          <DisplayMessages />
+          <MessageForum />
+        </ContactDetailsContext.Provider>
+      </SocketProvider>
     </div>
   );
 }

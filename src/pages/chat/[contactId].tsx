@@ -3,7 +3,14 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import UserProfile from "~/components/Profile";
 import { SocketProvider, useSocket } from "~/components/Provider/Socket";
 import { api } from "~/utils/api";
@@ -13,7 +20,11 @@ const ContactDetailsContext = createContext({} as User);
 function DisplayMessages() {
   const { id: contactId, name, image } = useContext(ContactDetailsContext);
   const { data } = useSession();
-  const { data: messageData, isError } = api.message.getMessages.useQuery(
+  const {
+    data: messageData,
+    isError,
+    isFetched,
+  } = api.message.getMessages.useQuery(
     {
       contactId,
     },
@@ -24,20 +35,30 @@ function DisplayMessages() {
       refetchInterval: 1000 * 60 * 3,
     }
   );
-  const [displayMessageData, setDisplayMessageData] = useState(
-    messageData ?? []
-  );
+  const [displayMessageData, setDisplayMessageData] = useState<
+    Message[] | undefined
+  >([]);
   const { socket } = useSocket();
+  const pageEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
-      displayMessageData.push(data);
-      setDisplayMessageData([...displayMessageData]);
+      setDisplayMessageData([...(displayMessageData ?? []), data]);
     });
     return () => {
       socket?.off("newMessage");
     };
   }, [socket]);
+
+  useLayoutEffect(() => {
+    if (isFetched) {
+      setDisplayMessageData(messageData);
+    }
+  }, [isFetched]);
+
+  useLayoutEffect(() => {
+    pageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [displayMessageData]);
 
   if (isError) return "Unable to load messages";
 
@@ -66,6 +87,7 @@ function DisplayMessages() {
           </div>
         );
       })}
+      <div ref={pageEndRef} />
     </>
   );
 }
@@ -190,11 +212,6 @@ export default function Chat() {
   const { query } = router;
   const contactData = JSON.parse((query.data as string) ?? "{}") as User;
 
-  const pageEndRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    pageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [pageEndRef]);
-
   useEffect(() => {
     // Remove all the query params and
     // Display username rather than userId
@@ -218,7 +235,7 @@ export default function Chat() {
           <MessageForum />
         </ContactDetailsContext.Provider>
       </SocketProvider>
-      <div style={{ marginBottom: 15 }} ref={pageEndRef} />
+      <div style={{ marginBottom: 15 }} />
     </div>
   );
 }

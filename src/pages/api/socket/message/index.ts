@@ -16,12 +16,19 @@ export default function handler(
     // Creating a message
     if (req.method == "POST") {
       const data = req.body as NewMessageData;
-      api.message.createMessage.useMutation().mutate({
+      const { mutate } = api.message.createMessage.useMutation({
+        onSuccess(data, _variables, _context) {
+          res?.socket?.server?.io?.emit("newMessage", data);
+          res.status(200).json({ message: "New Message Sent" });
+        },
+        onError: () => {
+          res.status(500).json({ message: "Interval Server Error" });
+        },
+      });
+      mutate({
         content: data.content,
         receiverId: data.receiverId,
       });
-      res?.socket?.server?.io?.emit("newMessage", req.body);
-      res.status(200).json({ message: "New Message Sent" });
     }
 
     // Deleting a message

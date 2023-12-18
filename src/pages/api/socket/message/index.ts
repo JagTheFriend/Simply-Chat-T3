@@ -23,6 +23,8 @@ export default function handler(
           senderId: data.senderId,
         },
       });
+      res?.socket?.server?.io?.emit("newMessage", data);
+      res.status(200).json({ message: "New Message Sent" });
     }
 
     // Deleting a message

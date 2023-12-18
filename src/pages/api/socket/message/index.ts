@@ -5,7 +5,7 @@ import type {
   NextApiResponseWithSocketIo,
 } from "~/utils/types";
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseWithSocketIo
 ) {
@@ -16,7 +16,7 @@ export default function handler(
     // Creating a message
     if (req.method == "POST") {
       const data = req.body as NewMessageData;
-      void db.message.create({
+      await db.message.create({
         data: {
           content: data.content,
           receiverId: data.receiverId,

@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 import UserProfile from "~/components/Profile";
-import { SocketProvider } from "~/components/Provider/Socket";
+import { SocketProvider, useSocket } from "~/components/Provider/Socket";
 import { api } from "~/utils/api";
 
 const ContactDetailsContext = createContext({} as User);
@@ -31,6 +31,19 @@ function DisplayMessages() {
       refetchInterval: 1000 * 60 * 3,
     }
   );
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    socket?.on("newMessage", (data) => {
+      console.log(
+        "🚀 ~ file: [contactId].tsx:36 ~ socket.socket?.on ~ data:",
+        data
+      );
+    });
+    return () => {
+      socket?.off("newMessage");
+    };
+  }, [socket]);
 
   if (isError) return "Unable to load messages";
 
@@ -113,7 +126,7 @@ function MessageForum() {
 
   useLayoutEffect(() => {
     inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [inputFormRef]);
 
   return (
     <div className="input-group" ref={inputFormRef}>

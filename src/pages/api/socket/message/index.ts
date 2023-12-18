@@ -1,5 +1,5 @@
 import type { NextApiRequest } from "next";
-import { api } from "~/utils/api";
+import { db } from "~/server/db";
 import type {
   NewMessageData,
   NextApiResponseWithSocketIo,
@@ -16,18 +16,12 @@ export default function handler(
     // Creating a message
     if (req.method == "POST") {
       const data = req.body as NewMessageData;
-      const { mutate } = api.message.createMessage.useMutation({
-        onSuccess(data, _variables, _context) {
-          res?.socket?.server?.io?.emit("newMessage", data);
-          res.status(200).json({ message: "New Message Sent" });
+      void db.message.create({
+        data: {
+          content: data.content,
+          receiverId: data.receiverId,
+          senderId: data.senderId,
         },
-        onError: () => {
-          res.status(500).json({ message: "Interval Server Error" });
-        },
-      });
-      mutate({
-        content: data.content,
-        receiverId: data.receiverId,
       });
     }
 

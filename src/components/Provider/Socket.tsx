@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useLayoutEffect, useState } from "react";
 import { io as ClientIO, type Socket } from "socket.io-client";
 
 type SocketContextType = {
@@ -19,7 +19,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (isConnected) return;
+
     const socketInstance = ClientIO(process.env.NEXT_PUBLIC_SITE_URL!, {
       path: "/api/socket/io",
       addTrailingSlash: false,

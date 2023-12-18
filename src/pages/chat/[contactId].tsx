@@ -1,4 +1,5 @@
 import type { User } from "@prisma/client";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -61,29 +62,23 @@ function SendButton({
   messageContent: string;
   setMessageContent: (value: string) => void;
 }) {
-  const util = api.useUtils();
+  const { data } = useSession();
   const contactDetails = useContext(ContactDetailsContext);
-  const { mutate } = api.message.createMessage.useMutation({
-    onError: () => {
-      alert("An Error occurred while sending message");
-    },
-    onSuccess: async () => {
-      await util.message.getMessages.invalidate();
-      setMessageContent("");
-    },
-  });
+  const sendMessage = async () => {
+    await axios.post("/api/socket/message", {
+      content: messageContent,
+      receiverId: contactDetails.id,
+      senderId: data?.user.id,
+    });
+    setMessageContent("");
+  };
 
   return (
     <button
       className="btn btn-success"
       type="button"
       disabled={!messageContent}
-      onClick={() => {
-        mutate({
-          content: messageContent,
-          receiverId: contactDetails.id,
-        });
-      }}
+      onClick={() => sendMessage()}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

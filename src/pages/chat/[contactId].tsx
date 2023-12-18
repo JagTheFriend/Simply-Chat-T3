@@ -20,11 +20,7 @@ const ContactDetailsContext = createContext({} as User);
 function DisplayMessages() {
   const { id: contactId, name, image } = useContext(ContactDetailsContext);
   const { data } = useSession();
-  const {
-    data: messageData,
-    isError,
-    isFetched,
-  } = api.message.getMessages.useQuery(
+  const { data: messageData, isError } = api.message.getMessages.useQuery(
     {
       contactId,
     },
@@ -54,10 +50,8 @@ function DisplayMessages() {
   }, [socket]);
 
   useLayoutEffect(() => {
-    if (isFetched || messageData) {
-      setDisplayMessageData(messageData ?? []);
-    }
-  }, [isFetched, messageData]);
+    setDisplayMessageData(messageData ?? []);
+  }, [messageData]);
 
   useLayoutEffect(() => {
     pageEndRef.current?.scrollIntoView({ behavior: "smooth" });

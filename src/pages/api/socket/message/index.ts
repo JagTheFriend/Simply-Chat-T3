@@ -11,7 +11,8 @@ export default function handler(
   try {
     // Creating a message
     if (req.method == "POST") {
-      console.log(req.body);
+      res?.socket?.server?.io?.emit("newMessage", req.body);
+      res.status(200).json({ message: "New Message Sent" });
     }
 
     // Deleting a message

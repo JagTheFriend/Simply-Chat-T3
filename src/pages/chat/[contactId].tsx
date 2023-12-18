@@ -3,14 +3,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import UserProfile from "~/components/Profile";
 import { SocketProvider, useSocket } from "~/components/Provider/Socket";
 import { api } from "~/utils/api";
@@ -119,14 +112,9 @@ function SendButton({
 
 function MessageForum() {
   const [messageContent, setMessageContent] = useState("");
-  const inputFormRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    inputFormRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [inputFormRef]);
 
   return (
-    <div className="input-group" ref={inputFormRef}>
+    <div className="input-group">
       <div className="form-floating">
         <input
           type="text"
@@ -198,6 +186,11 @@ export default function Chat() {
   const { query } = router;
   const contactData = JSON.parse((query.data as string) ?? "{}") as User;
 
+  const pageEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    pageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [pageEndRef]);
+
   useEffect(() => {
     // Remove all the query params and
     // Display username rather than userId
@@ -221,6 +214,7 @@ export default function Chat() {
           <MessageForum />
         </ContactDetailsContext.Provider>
       </SocketProvider>
+      <div style={{ marginBottom: 15 }} ref={pageEndRef} />
     </div>
   );
 }
